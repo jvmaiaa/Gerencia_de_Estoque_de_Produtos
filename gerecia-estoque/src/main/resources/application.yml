@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: Gerencia de Estoque
+
+  profiles:
+    active: dev # Defino qual arquivo de application será utilizado
+
+
+  jpa:
+    open-in-view: true # Habilita a visualização das queries no console
+    properties:
+      hibernate:
+        format_sql: true # Formata as queries no console
+
+
+
+server:
+  servlet:
+    context-path: /api/v1 # Define o prefixo de todas URLs da api
