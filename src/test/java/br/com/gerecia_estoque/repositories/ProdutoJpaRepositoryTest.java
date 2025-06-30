@@ -1,4 +1,4 @@
-package br.com.gerecia_estoque.repository;
+package br.com.gerecia_estoque.repositories;
 
 import br.com.gerecia_estoque.modules.produto.infrastructure.ProdutoEntity;
 import br.com.gerecia_estoque.modules.produto.infrastructure.ProdutoJpaRepository;
