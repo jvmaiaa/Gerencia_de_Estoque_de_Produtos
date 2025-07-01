@@ -1,20 +1,18 @@
-//package br.com.gerecia_estoque.modules.produto.application.service;
+//package br.com.gerecia_estoque.modules.produto.core.service;
 //
 //import br.com.gerecia_estoque.modules.produto.domain.entity.Produto;
 //import br.com.gerecia_estoque.modules.produto.domain.exception.ProdutoJaExisteException;
 //import br.com.gerecia_estoque.modules.produto.domain.repository.ProdutoRepository;
+//import lombok.RequiredArgsConstructor;
 //import org.springframework.stereotype.Service;
 //
 //import java.math.BigDecimal;
 //
+//@RequiredArgsConstructor
 //@Service
 //public class CadastrarProdutoService {
 //
 //    private final ProdutoRepository produtoRepository;
-//
-//    public CadastrarProdutoService(ProdutoRepository produtoRepository) {
-//        this.produtoRepository = produtoRepository;
-//    }
 //
 //    public Produto executar(String nome, String descricao, BigDecimal preco) {
 //        produtoRepository.buscarPorNome(nome).ifPresent(p -> {
