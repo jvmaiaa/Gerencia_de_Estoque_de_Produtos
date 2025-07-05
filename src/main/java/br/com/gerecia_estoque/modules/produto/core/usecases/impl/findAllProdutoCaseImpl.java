@@ -1,4 +1,6 @@
 package br.com.gerecia_estoque.modules.produto.core.usecases.impl;
 
-public class findAllProdutoCaseImpl {
+import br.com.gerecia_estoque.modules.produto.core.usecases.findByIdProdutoCase;
+
+public class findAllProdutoCaseImpl implements findByIdProdutoCase {
 }

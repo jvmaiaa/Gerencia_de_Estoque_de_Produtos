@@ -1,4 +1,6 @@
 package br.com.gerecia_estoque.modules.produto.core.usecases.impl;
 
-public class updateProdutoCaseImpl {
+import br.com.gerecia_estoque.modules.produto.core.usecases.updateProdutoCase;
+
+public class updateProdutoCaseImpl implements updateProdutoCase {
 }

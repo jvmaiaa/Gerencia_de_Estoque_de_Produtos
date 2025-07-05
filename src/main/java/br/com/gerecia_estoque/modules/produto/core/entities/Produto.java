@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ProdutoEntity {
+public class Produto {
 
     private UUID id;
     private String nome;
@@ -14,15 +14,15 @@ public class ProdutoEntity {
     private LocalDateTime dataCadastro;
     private LocalDateTime dataAtualizacao;
 
-    public ProdutoEntity() {}
+    public Produto() {}
 
-    public ProdutoEntity(UUID id,
-                         String nome,
-                         String descricao,
-                         String codigoBarras,
-                         Integer quantidade,
-                         LocalDateTime dataCadastro,
-                         LocalDateTime dataAtualizacao) {
+    public Produto(UUID id,
+                   String nome,
+                   String descricao,
+                   String codigoBarras,
+                   Integer quantidade,
+                   LocalDateTime dataCadastro,
+                   LocalDateTime dataAtualizacao) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -91,7 +91,7 @@ public class ProdutoEntity {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        ProdutoEntity that = (ProdutoEntity) o;
+        Produto that = (Produto) o;
         return Objects.equals(id, that.id);
     }
 

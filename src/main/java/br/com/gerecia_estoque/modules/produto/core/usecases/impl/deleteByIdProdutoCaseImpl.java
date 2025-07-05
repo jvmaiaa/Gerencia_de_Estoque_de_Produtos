@@ -1,4 +1,6 @@
 package br.com.gerecia_estoque.modules.produto.core.usecases.impl;
 
-public class deleteByIdProdutoCaseImpl {
+import br.com.gerecia_estoque.modules.produto.core.usecases.deleteByIdProdutoCase;
+
+public class deleteByIdProdutoCaseImpl implements deleteByIdProdutoCase {
 }
