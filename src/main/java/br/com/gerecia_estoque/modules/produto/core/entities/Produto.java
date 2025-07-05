@@ -10,7 +10,7 @@ public class Produto {
     private String nome;
     private String descricao;
     private String codigoBarras;
-    private Integer quantidade;
+    private Integer quantidadeEstoque;
     private LocalDateTime dataCadastro;
     private LocalDateTime dataAtualizacao;
 
@@ -20,14 +20,14 @@ public class Produto {
                    String nome,
                    String descricao,
                    String codigoBarras,
-                   Integer quantidade,
+                   Integer quantidadeEstoque,
                    LocalDateTime dataCadastro,
                    LocalDateTime dataAtualizacao) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.codigoBarras = codigoBarras;
-        this.quantidade = quantidade;
+        this.quantidadeEstoque = quantidadeEstoque;
         this.dataCadastro = dataCadastro;
         this.dataAtualizacao = dataAtualizacao;
     }
@@ -64,12 +64,12 @@ public class Produto {
         this.codigoBarras = codigoBarras;
     }
 
-    public Integer getQuantidade() {
-        return quantidade;
+    public Integer getQuantidadeEstoque() {
+        return quantidadeEstoque;
     }
 
     public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
+        this.quantidadeEstoque = quantidadeEstoque;
     }
 
     public LocalDateTime getDataCadastro() {
@@ -107,7 +107,7 @@ public class Produto {
                 ", nome='" + nome + '\'' +
                 ", descricao='" + descricao + '\'' +
                 ", codigoBarras='" + codigoBarras + '\'' +
-                ", quantidade=" + quantidade +
+                ", quantidadeEstoque=" + quantidadeEstoque +
                 ", dataCadastro=" + dataCadastro +
                 ", dataAtualizacao=" + dataAtualizacao +
                 '}';

@@ -7,3 +7,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+
+  flyway:
+    enabled: true # Habilita o Flyway na aplicação
+    locations: classpath:db/migration # Caminho dos scripts de migração

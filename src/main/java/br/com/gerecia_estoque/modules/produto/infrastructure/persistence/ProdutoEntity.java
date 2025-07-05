@@ -1,4 +1,4 @@
-package br.com.gerecia_estoque.modules.produto.infrastructure;
+package br.com.gerecia_estoque.modules.produto.infrastructure.persistence;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +21,7 @@ import java.util.UUID;
 public class ProdutoEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String nome;
@@ -32,11 +32,10 @@ public class ProdutoEntity {
 
     private BigDecimal preco;
 
-    private Integer quantidade;
+    private Integer quantidadeEstoque;
 
     private LocalDateTime dataCadastro;
 
     private LocalDateTime dataAtualizacao;
-
-
+    // poderia receber um ENUM da camada CORE, já que a camada de infrastructure conhece a camada CORE.
 }

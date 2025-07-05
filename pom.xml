@@ -93,17 +93,17 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!--		&lt;!&ndash; Gerencia migrações de banco de dados &ndash;&gt;-->
-<!--		<dependency>-->
-<!--			<groupId>org.flywaydb</groupId>-->
-<!--			<artifactId>flyway-core</artifactId>-->
-<!--		</dependency>-->
+		<!-- Gerencia migrações de banco de dados -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
 
-<!--		&lt;!&ndash; Suporte ao Flyway com PostgreSQL &ndash;&gt;-->
-<!--		<dependency>-->
-<!--			<groupId>org.flywaydb</groupId>-->
-<!--			<artifactId>flyway-database-postgresql</artifactId>-->
-<!--		</dependency>-->
+		<!-- Suporte ao Flyway com PostgreSQL -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+		</dependency>
 
 		<!-- Segurança com autenticação e autorização -->
 		<!-- <dependency>
