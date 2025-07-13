@@ -2,7 +2,8 @@ package br.com.gerecia_estoque.modules.produto.application.usecases;
 
 import br.com.gerecia_estoque.modules.produto.application.entities.Produto;
 
-public interface createProdutoCase {
+import java.util.List;
 
-    Produto execute(Produto produtoDomainObj);
+public interface FindAllProdutoCase {
+    List<Produto> execute();
 }

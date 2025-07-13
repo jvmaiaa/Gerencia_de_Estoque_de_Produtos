@@ -1,5 +1,6 @@
 package br.com.gerecia_estoque.modules.produto.application.entities;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -11,6 +12,7 @@ public class Produto {
     private String descricao;
     private String codigoBarras;
     private Integer quantidadeEstoque;
+    private BigDecimal preco;
     private LocalDateTime dataCadastro;
     private LocalDateTime dataAtualizacao;
 
@@ -21,6 +23,7 @@ public class Produto {
                    String descricao,
                    String codigoBarras,
                    Integer quantidadeEstoque,
+                   BigDecimal preco,
                    LocalDateTime dataCadastro,
                    LocalDateTime dataAtualizacao) {
         this.id = id;
@@ -28,6 +31,7 @@ public class Produto {
         this.descricao = descricao;
         this.codigoBarras = codigoBarras;
         this.quantidadeEstoque = quantidadeEstoque;
+        this.preco = preco;
         this.dataCadastro = dataCadastro;
         this.dataAtualizacao = dataAtualizacao;
     }
@@ -68,8 +72,16 @@ public class Produto {
         return quantidadeEstoque;
     }
 
-    public void setQuantidade(Integer quantidade) {
+    public void setQuantidadeEstoque(Integer quantidadeEstoque) {
         this.quantidadeEstoque = quantidadeEstoque;
+    }
+
+    public BigDecimal getPreco() {
+        return preco;
+    }
+
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
     }
 
     public LocalDateTime getDataCadastro() {
@@ -102,12 +114,13 @@ public class Produto {
 
     @Override
     public String toString() {
-        return "ProdutoEntity{" +
+        return "Produto{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
                 ", descricao='" + descricao + '\'' +
                 ", codigoBarras='" + codigoBarras + '\'' +
                 ", quantidadeEstoque=" + quantidadeEstoque +
+                ", preco=" + preco +
                 ", dataCadastro=" + dataCadastro +
                 ", dataAtualizacao=" + dataAtualizacao +
                 '}';

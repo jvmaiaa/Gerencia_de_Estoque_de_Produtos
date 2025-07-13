@@ -1,11 +1,11 @@
 package br.com.gerecia_estoque.modules.produto.application.usecases.impl;
 
 import br.com.gerecia_estoque.modules.produto.application.entities.Produto;
-import br.com.gerecia_estoque.modules.produto.application.usecases.findByIdProdutoCase;
+import br.com.gerecia_estoque.modules.produto.application.usecases.FindByIdProdutoCase;
 
 import java.util.UUID;
 
-public class findAllProdutoCaseImpl implements findByIdProdutoCase {
+public class FindByIdProdutoCaseImpl implements FindByIdProdutoCase {
 
     @Override
     public Produto execute(UUID uuid) {

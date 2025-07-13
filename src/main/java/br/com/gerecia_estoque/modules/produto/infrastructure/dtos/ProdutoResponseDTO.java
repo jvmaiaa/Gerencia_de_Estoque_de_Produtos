@@ -1,0 +1,31 @@
+package br.com.gerecia_estoque.modules.produto.infrastructure.dtos;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProdutoResponseDTO {
+
+    private UUID uuid;
+
+    private String nome;
+
+    private String descricao;
+
+    private String codidoBarras;
+
+    private Integer quantidadeEstoque;
+
+    private Double preco;
+
+    private LocalDateTime dataCadastro;
+
+    private LocalDateTime dataAtualizacao;
+}
+

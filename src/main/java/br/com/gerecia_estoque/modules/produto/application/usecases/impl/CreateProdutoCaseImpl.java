@@ -2,13 +2,13 @@ package br.com.gerecia_estoque.modules.produto.application.usecases.impl;
 
 import br.com.gerecia_estoque.modules.produto.application.entities.Produto;
 import br.com.gerecia_estoque.modules.produto.application.gateways.ProdutoGateway;
-import br.com.gerecia_estoque.modules.produto.application.usecases.createProdutoCase;
+import br.com.gerecia_estoque.modules.produto.application.usecases.CreateProdutoCase;
 
-public class createProdutoCaseImpl implements createProdutoCase {
+public class CreateProdutoCaseImpl implements CreateProdutoCase {
 
     private final ProdutoGateway produtoGateway;
 
-    public createProdutoCaseImpl(ProdutoGateway produtoGateway) {
+    public CreateProdutoCaseImpl(ProdutoGateway produtoGateway) {
         this.produtoGateway = produtoGateway;
     }
 
