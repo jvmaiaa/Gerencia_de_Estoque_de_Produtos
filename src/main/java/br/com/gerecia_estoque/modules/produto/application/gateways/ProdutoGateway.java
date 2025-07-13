@@ -8,11 +8,13 @@ import java.util.UUID;
 
 public interface ProdutoGateway {
 
-    Produto save(Produto produto);
+    Produto save(Produto produtoDomainObj);
 
     Optional<Produto> findById(UUID uuid);
 
     List<Produto> findAll(UUID uuid);
+
+    Produto update(UUID uuid, Produto produtoDomainObj);
 
     void deleteById(UUID uuid);
 

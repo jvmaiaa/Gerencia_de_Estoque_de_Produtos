@@ -37,5 +37,5 @@ public class ProdutoEntity {
     private LocalDateTime dataCadastro;
 
     private LocalDateTime dataAtualizacao;
-    // poderia receber um ENUM da camada CORE, já que a camada de infrastructure conhece a camada CORE.
+    // poderia receber um ENUM da camada Application, já que a camada de infrastructure conhece a camada Application.
 }

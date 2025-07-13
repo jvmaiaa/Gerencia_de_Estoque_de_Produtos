@@ -5,5 +5,5 @@ import br.com.gerecia_estoque.modules.produto.application.entities.Produto;
 import java.util.UUID;
 
 public interface updateProdutoCase {
-    Produto execute(UUID uuid, Produto produto);
+    Produto execute(UUID uuid, Produto produtoDomainObj);
 }
