@@ -1,4 +1,4 @@
-package br.com.gerecia_estoque.modules.produto.core.entities;
+package br.com.gerecia_estoque.modules.produto.application.entities;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
