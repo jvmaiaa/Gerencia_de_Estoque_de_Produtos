@@ -1,6 +1,6 @@
-package br.com.gerecia_estoque.modules.produto.infrastructure.presentation;
+package br.com.gerecia_estoque.modules.produto.infrastructure.controller;
 
-import br.com.gerecia_estoque.modules.produto.application.entities.Produto;
+import br.com.gerecia_estoque.modules.produto.domain.entity.Produto;
 import br.com.gerecia_estoque.modules.produto.application.usecases.CreateProdutoCase;
 import br.com.gerecia_estoque.modules.produto.infrastructure.dtos.ProdutoRequestDTO;
 import br.com.gerecia_estoque.modules.produto.infrastructure.dtos.ProdutoResponseDTO;
@@ -26,14 +26,15 @@ public class ProdutoController {
 
     @PostMapping
     public ResponseEntity<ProdutoResponseDTO> create(@RequestBody @Valid ProdutoRequestDTO produto) {
-        Produto produtoDomain = produtoMapper.requestToDomain(produto);
+        Produto produtoDomain = produtoMapper.requestDTOToDomain(produto);
         Produto produtoSaved = createProdutoCase.execute(produtoDomain);
         ProdutoResponseDTO produtoResponse = produtoMapper.domainToResponseDTO(produtoSaved);
+
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .path("/{id}")
                 .buildAndExpand(produtoSaved.getId())
                 .toUri();
 
-        return ResponseEntity.created(uri).body(produtoResponse); // Define status 201
+        return ResponseEntity.created(uri).body(produtoResponse);
     }
 }

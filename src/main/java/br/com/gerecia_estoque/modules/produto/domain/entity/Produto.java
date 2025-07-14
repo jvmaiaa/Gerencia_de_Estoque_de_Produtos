@@ -1,4 +1,4 @@
-package br.com.gerecia_estoque.modules.produto.application.entities;
+package br.com.gerecia_estoque.modules.produto.domain.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

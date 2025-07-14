@@ -1,8 +1,8 @@
 package br.com.gerecia_estoque.modules.produto.application.usecases.impl;
 
-import br.com.gerecia_estoque.modules.produto.application.entities.Produto;
 import br.com.gerecia_estoque.modules.produto.application.gateways.ProdutoGateway;
 import br.com.gerecia_estoque.modules.produto.application.usecases.CreateProdutoCase;
+import br.com.gerecia_estoque.modules.produto.domain.entity.Produto;
 
 public class CreateProdutoCaseImpl implements CreateProdutoCase {
 

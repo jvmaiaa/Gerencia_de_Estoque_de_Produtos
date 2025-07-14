@@ -1,6 +1,6 @@
 package br.com.gerecia_estoque.modules.produto.infrastructure.gateways;
 
-import br.com.gerecia_estoque.modules.produto.application.entities.Produto;
+import br.com.gerecia_estoque.modules.produto.domain.entity.Produto;
 import br.com.gerecia_estoque.modules.produto.application.gateways.ProdutoGateway;
 import br.com.gerecia_estoque.modules.produto.infrastructure.mapper.ProdutoMapper;
 import br.com.gerecia_estoque.modules.produto.infrastructure.persistence.ProdutoEntity;

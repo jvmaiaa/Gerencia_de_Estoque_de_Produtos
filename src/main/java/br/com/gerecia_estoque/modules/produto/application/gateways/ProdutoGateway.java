@@ -1,6 +1,6 @@
 package br.com.gerecia_estoque.modules.produto.application.gateways;
 
-import br.com.gerecia_estoque.modules.produto.application.entities.Produto;
+import br.com.gerecia_estoque.modules.produto.domain.entity.Produto;
 
 import java.util.List;
 import java.util.Optional;
