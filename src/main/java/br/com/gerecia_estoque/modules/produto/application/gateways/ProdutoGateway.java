@@ -18,5 +18,5 @@ public interface ProdutoGateway {
 
     void deleteById(UUID uuid);
 
-    Optional<Produto> findByName(String nome);
+//    Optional<Produto> findByName(String nome);
 }

@@ -51,8 +51,8 @@ public class ProdutoRepositoryGateway implements ProdutoGateway {
 
     }
 
-    @Override
-    public Optional<Produto> findByName(String nome) {
-        return Optional.empty();
-    }
+//    @Override
+//    public Optional<Produto> findByName(String nome) {
+//        return Optional.empty();
+//    }
 }

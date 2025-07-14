@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ProdutoResponseDTO {
 
-    private UUID uuid;
+    private UUID id;
 
     private String nome;
 
