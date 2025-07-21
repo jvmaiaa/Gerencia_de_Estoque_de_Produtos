@@ -37,7 +37,7 @@ public class ProdutoRepositoryGateway implements ProdutoGateway {
     }
 
     @Override
-    public List<Produto> findAll(UUID uuid) {
+    public List<Produto> findAll() {
         return List.of();
     }
 

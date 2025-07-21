@@ -12,7 +12,7 @@ public interface ProdutoGateway {
 
     Optional<Produto> findById(UUID uuid);
 
-    List<Produto> findAll(UUID uuid);
+    List<Produto> findAll();
 
     Produto update(UUID uuid, Produto produtoDomainObj);
 

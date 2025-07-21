@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring",
-        unmappedTargetPolicy = ReportingPolicy.ERROR) // dispara erro caso o Objeto de saída não tenha algum campo mapeado
+        unmappedTargetPolicy = ReportingPolicy.ERROR) // ignora caso o Objeto de saída não tenha algum campo mapeado
 public interface ProdutoMapper {
 
     ProdutoEntity domainToEntity(Produto produtoDomainObj);

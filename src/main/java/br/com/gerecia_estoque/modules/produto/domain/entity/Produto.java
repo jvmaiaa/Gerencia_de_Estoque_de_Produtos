@@ -1,5 +1,7 @@
 package br.com.gerecia_estoque.modules.produto.domain.entity;
 
+import br.com.gerecia_estoque.modules.produto.domain.exception.ProdutoEmptyException;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -27,6 +29,9 @@ public class Produto {
                    LocalDateTime dataCadastro,
                    LocalDateTime dataAtualizacao) {
         this.id = id;
+        if (nome != null && nome.isEmpty()) {
+            throw new ProdutoEmptyException("Nome não pode ser vazio");
+        }
         this.nome = nome;
         this.descricao = descricao;
         this.codigoBarras = codigoBarras;

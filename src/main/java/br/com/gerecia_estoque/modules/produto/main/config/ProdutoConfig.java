@@ -9,9 +9,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ProdutoConfig {
 
+//    private final ProdutoGateway produtoGateway;
+//
+//    public ProdutoConfig(ProdutoGateway produtoGateway) {
+//        this.produtoGateway = produtoGateway;
+//    }
+
     /**
      * Creates a bean for the CreateProdutoCase use case.
-     * 
+     *
      * @param produtoGateway The gateway for produto operations
      * @return An implementation of CreateProdutoCase
      */

@@ -1,5 +1,6 @@
 package br.com.gerecia_estoque.shared.exceptions;
 
+import br.com.gerecia_estoque.modules.produto.domain.exception.ProdutoEmptyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -26,6 +27,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleEntityInUseException(EntityInUseException ex) {
         ApiErrorResponse error = new ApiErrorResponse(
                 CONFLICT.value(),
+                ex.getMessage(),
+                ex.getLocalizedMessage(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(ProdutoEmptyException.class)
+    public ResponseEntity<ApiErrorResponse> handleProdutoEmptyException(ProdutoEmptyException ex) {
+        ApiErrorResponse error = new ApiErrorResponse(
+                BAD_REQUEST.value(),
                 ex.getMessage(),
                 ex.getLocalizedMessage(),
                 LocalDateTime.now()
