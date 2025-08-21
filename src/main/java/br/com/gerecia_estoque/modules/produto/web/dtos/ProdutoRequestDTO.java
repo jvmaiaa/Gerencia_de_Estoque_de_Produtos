@@ -1,4 +1,4 @@
-package br.com.gerecia_estoque.modules.produto.infrastructure.dtos;
+package br.com.gerecia_estoque.modules.produto.web.dtos;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
