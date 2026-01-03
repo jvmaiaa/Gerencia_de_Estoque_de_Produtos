@@ -53,6 +53,7 @@ public class ProdutoServiceImpl implements ProdutoService {
                 .orElseThrow(() -> new EntityNotFoundException(PRODUTO_NAO_ENCONTRADO));
 
         produtoMapper.updateEntityFromRequestDTO(produtoRequestDTO, produtoEntity);
+        produtoEntity.setDataUltimaAtualizacao(LocalDateTime.now());
         produtoRepository.save(produtoEntity);
 
         return produtoMapper.entityToResponse(produtoEntity);
