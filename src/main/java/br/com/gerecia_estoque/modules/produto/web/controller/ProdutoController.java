@@ -58,7 +58,7 @@ public class ProdutoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoResponseDTO> update(@PathVariable UUID id,
-                                                     @RequestBody @Valid ProdutoRequestDTO produtoRequestDTO) {
+                                                     @RequestBody ProdutoRequestDTO produtoRequestDTO) {
         return ResponseEntity.ok(produtoService.update(id, produtoRequestDTO));
     }
 
