@@ -1,6 +1,7 @@
 package br.com.gerecia_estoque.modules.produto.service.impl;
 
 import br.com.gerecia_estoque.modules.produto.domain.entity.ProdutoEntity;
+import br.com.gerecia_estoque.modules.produto.domain.exception.ProdutoExistsException;
 import br.com.gerecia_estoque.modules.produto.domain.repository.ProdutoRepository;
 import br.com.gerecia_estoque.modules.produto.service.ProdutoService;
 import br.com.gerecia_estoque.modules.produto.web.dtos.ProdutoRequestDTO;
@@ -16,7 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static br.com.gerecia_estoque.shared.exceptions.ExceptionMessages.CODIGO_BARRAS_NAO_PODE_SER_ALTERADO;
+import static br.com.gerecia_estoque.shared.exceptions.ExceptionMessages.PRODUTO_JA_EXISTE;
 import static br.com.gerecia_estoque.shared.exceptions.ExceptionMessages.PRODUTO_NAO_ENCONTRADO;
+import static java.util.Objects.nonNull;
 
 @RequiredArgsConstructor
 @Service
@@ -49,6 +53,8 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Override
     @Transactional
     public ProdutoResponseDTO update(UUID uuid, ProdutoRequestDTO produtoRequestDTO) {
+        validaNomeECodigoDeBarras(produtoRequestDTO);
+
         ProdutoEntity produtoEntity = produtoRepository.findById(uuid)
                 .orElseThrow(() -> new EntityNotFoundException(PRODUTO_NAO_ENCONTRADO));
 
@@ -66,4 +72,14 @@ public class ProdutoServiceImpl implements ProdutoService {
 
         produtoRepository.deleteById(uuid);
     }
+
+    private void validaNomeECodigoDeBarras(ProdutoRequestDTO produtoRequestDTO) {
+        if (nonNull(produtoRequestDTO.getCodigoBarras())) {
+            throw new ProdutoExistsException(CODIGO_BARRAS_NAO_PODE_SER_ALTERADO);
+        }
+        produtoRepository.findByNome(produtoRequestDTO.getNome()).ifPresent(produto -> {
+            throw new ProdutoExistsException(String.format(PRODUTO_JA_EXISTE, produtoRequestDTO.getNome()));
+        });
+    }
+
 }

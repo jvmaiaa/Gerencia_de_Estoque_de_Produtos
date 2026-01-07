@@ -1,6 +1,7 @@
 package br.com.gerecia_estoque.shared.exceptions;
 
 import br.com.gerecia_estoque.modules.produto.domain.exception.ProdutoEmptyException;
+import br.com.gerecia_estoque.modules.produto.domain.exception.ProdutoExistsException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +53,20 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(BAD_REQUEST).body(error);
     }
+
+    @ExceptionHandler(ProdutoExistsException.class)
+    public ResponseEntity<ApiErrorResponse> handleProdutoExistsException(ProdutoExistsException ex,
+                                                                              HttpServletRequest request) {
+        ApiErrorResponse error = new ApiErrorResponse(
+                CONFLICT.value(),
+                CONFLICT.getReasonPhrase(),
+                ex.getMessage(),
+                request.getRequestURI(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(CONFLICT).body(error);
+    }
+
+
 
 }
