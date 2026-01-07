@@ -28,9 +28,9 @@ public class ProdutoEntity {
 
     private String codigoBarras;
 
-    private Integer quantidadeEstoque;
-
     private BigDecimal preco;
+
+    private Integer quantidadeEstoque;
 
     private LocalDateTime dataCadastro;
 

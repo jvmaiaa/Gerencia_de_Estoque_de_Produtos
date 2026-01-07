@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class ApiErrorResponse {
 
     private int statusCode;
+    private String error;
     private String message;
     private String path;
     private LocalDateTime timestamp;

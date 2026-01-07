@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -23,9 +24,9 @@ public class ProdutoResponseDTO {
 
     private String codigoBarras;
 
-    private Integer quantidadeEstoque;
+    private BigDecimal preco;
 
-    private Double preco;
+    private Integer quantidadeEstoque;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime dataCadastro;

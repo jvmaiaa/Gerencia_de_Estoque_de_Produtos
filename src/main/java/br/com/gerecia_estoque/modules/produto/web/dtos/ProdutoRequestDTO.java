@@ -22,11 +22,11 @@ public class ProdutoRequestDTO {
     @NotEmpty(message = "O código de barras do produto é obrigatório")
     private String codigoBarras;
 
+    @NotNull(message = "O preço do produto não pode ser nulo")
+    private BigDecimal preco;
+
     @NotNull(message = "A quantidade em estoque do produto é obrigatória")
     @Min(value = 0, message = "Quantidade em estoque não pode ser negativa")
     private Integer quantidadeEstoque;
-
-    @NotNull(message = "O preço do produto não pode ser nulo")
-    private BigDecimal preco;
 
 }
