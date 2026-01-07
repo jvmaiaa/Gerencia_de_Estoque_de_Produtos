@@ -29,6 +29,7 @@ public interface ProdutoMapper {
     // informa ao mapper para ignorar campos nulos no DTO de requisição
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dataCadastro", ignore = true)
+    @Mapping(target = "dataUltimaAtualizacao", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromRequestDTO(ProdutoRequestDTO produtoRequestDTO,
                                     @MappingTarget ProdutoEntity produtoEntity);

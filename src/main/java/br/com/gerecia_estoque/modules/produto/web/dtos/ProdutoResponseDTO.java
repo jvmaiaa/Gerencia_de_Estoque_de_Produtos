@@ -24,9 +24,9 @@ public class ProdutoResponseDTO {
 
     private String codigoBarras;
 
-    private Integer quantidadeEstoque;
-
     private BigDecimal preco;
+
+    private Integer quantidadeEstoque;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime dataCadastro;
