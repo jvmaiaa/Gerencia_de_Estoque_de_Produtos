@@ -1,5 +1,18 @@
 package br.com.gerecia_estoque.modules.produto.service.impl;
 
+import static br.com.gerecia_estoque.shared.exceptions.ExceptionMessages.CODIGO_BARRAS_NAO_PODE_SER_ALTERADO;
+import static br.com.gerecia_estoque.shared.exceptions.ExceptionMessages.PRODUTO_JA_EXISTE;
+import static br.com.gerecia_estoque.shared.exceptions.ExceptionMessages.PRODUTO_NAO_ENCONTRADO;
+import static java.util.Objects.nonNull;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import br.com.gerecia_estoque.modules.produto.domain.entity.ProdutoEntity;
 import br.com.gerecia_estoque.modules.produto.domain.exception.ProdutoExistsException;
 import br.com.gerecia_estoque.modules.produto.domain.repository.ProdutoRepository;
@@ -9,19 +22,7 @@ import br.com.gerecia_estoque.modules.produto.web.dtos.ProdutoResponseDTO;
 import br.com.gerecia_estoque.modules.produto.web.mapper.ProdutoMapper;
 import br.com.gerecia_estoque.shared.exceptions.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import static br.com.gerecia_estoque.shared.exceptions.ExceptionMessages.CODIGO_BARRAS_NAO_PODE_SER_ALTERADO;
-import static br.com.gerecia_estoque.shared.exceptions.ExceptionMessages.PRODUTO_JA_EXISTE;
-import static br.com.gerecia_estoque.shared.exceptions.ExceptionMessages.PRODUTO_NAO_ENCONTRADO;
-import static java.util.Objects.nonNull;
-
+// teste
 @RequiredArgsConstructor
 @Service
 public class ProdutoServiceImpl implements ProdutoService {
