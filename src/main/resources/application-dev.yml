@@ -6,7 +6,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
   flyway:
     enabled: true # Habilita o Flyway na aplicação
