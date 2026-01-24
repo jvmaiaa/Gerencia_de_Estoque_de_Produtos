@@ -1,10 +1,13 @@
 name: CI/CD for Java Spring Project
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: 
+
+#run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
+on: # informa quando que o workflow deve ser executado
   push:
     branches: [main, feature/* ]
   pull_request:
     branches: [main]
+
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
