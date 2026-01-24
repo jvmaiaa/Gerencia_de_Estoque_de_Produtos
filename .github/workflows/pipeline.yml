@@ -1,16 +1,18 @@
 name: CI/CD for Java Spring Project
 
-#run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-
-on: # informa quando que o workflow deve ser executado
+# eventos que irão disparar os jobs
+on:
   push:
     branches: [main, feature/* ]
   pull_request:
     branches: [main]
 
 jobs:
-  Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
+
+  build: # nome do job
+    name: Build, Test and Package Spring Application # nome amigável do job
+    runs-on: ubuntu-latest # ambiente onde o job será executado
+
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
