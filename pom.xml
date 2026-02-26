@@ -150,6 +150,8 @@
 			<version>${instancio.version}</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- O Spring Boot Actuator fornece endpoints de monitoramento e saúde da aplicação -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -164,6 +166,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
 			<!-- Plugin para suporte ao MapStruct e Lombok -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -189,6 +192,85 @@
 						<arg>-Amapstruct.unmappedTargetPolicy=IGNORE</arg>
 					</compilerArgs>
 				</configuration>
+			</plugin>
+
+			<!-- Plugin do JaCoCo para gerar relatórios de cobertura de testes -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.14</version>
+				<!-- Excluir classes de configuração, DTOs, etc Globalmente -->
+				<configuration>
+					<excludes>
+						<exclude>**/exception/**</exclude>
+						<exclude>**/response/**</exclude>
+						<exclude>**/enums/**</exclude>
+						<exclude>**/config/**</exclude>
+						<exclude>**/shared/**</exclude>
+						<exclude>**/GerenciaEstoqueApplication.class</exclude>
+					</excludes>
+				</configuration>
+
+				<executions>
+					<!-- ETAPA 1: Preparar o "espião" que vai monitorar os testes -->
+					<execution>
+						<goals>
+							<!-- Liga o JaCoCo antes dos testes rodarem para observar quais linhas de código foram executadas -->
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<!-- ETAPA 2: Gerar o relatório visual (HTML) -->
+					<execution>
+						<id>report</id>
+						<!-- Roda na fase "prepare-package" (depois dos testes) -->
+						<phase>prepare-package</phase>
+						<goals>
+							<!-- Pega os dados coletados e transforma em um site HTML padrão: target/site/jacoco/index.html -->
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<!-- ETAPA 3: Verificar se atingiu a meta de 80% de cobertura -->
+					<execution>
+						<id>jacoco-check</id>
+						<goals>
+							<!-- Confere se a cobertura está >= 80% -->
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<rule>
+									<!-- Verifica por pacote (cada pasta do projeto) -->
+									<element>PACKAGE</element>
+									<limits>
+										<!-- VERIFICAÇÃO 1: Cobertura de LINHAS -->
+										<limit>
+											<!-- Conta: quantas LINHAS de código foram testadas? -->
+											<counter>LINE</counter>
+											<!-- Usa a PROPORÇÃO de linhas cobertas (0.80 = 80%) -->
+											<value>COVEREDRATIO</value>
+											<!-- Se tiver menos de 80% de linhas, o Maven FALHA -->
+											<minimum>0.80</minimum>
+										</limit>
+
+										<!-- VERIFICAÇÃO 2: Cobertura de RAMIFICAÇÕES (if/else, switch) -->
+										<limit>
+											<!-- Conta: quantos CAMINHOS do código foram testados? -->
+											<!-- Exemplo: if/else tem 2 caminhos (true e false) -->
+											<counter>BRANCH</counter>
+											<!-- Usa a PROPORÇÃO de ramificações cobertas -->
+											<value>COVEREDRATIO</value>
+											<!-- Se tiver menos de 80% de caminhos testados, FALHA -->
+											<!-- Isso garante que você testou tanto o "if" quanto o "else" -->
+											<minimum>0.80</minimum>
+										</limit>
+
+									</limits>
+								</rule>
+							</rules>
+						</configuration>
+					</execution>
+
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
