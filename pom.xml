@@ -199,8 +199,19 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.14</version>
-				<executions>
+				<!-- Excluir classes de configuração, DTOs, etc Globalmente -->
+				<configuration>
+					<excludes>
+						<exclude>**/exception/**</exclude>
+						<exclude>**/response/**</exclude>
+						<exclude>**/enums/**</exclude>
+						<exclude>**/config/**</exclude>
+						<exclude>**/shared/**</exclude>
+						<exclude>**/GerenciaEstoqueApplication.class</exclude>
+					</excludes>
+				</configuration>
 
+				<executions>
 					<!-- ETAPA 1: Preparar o "espião" que vai monitorar os testes -->
 					<execution>
 						<goals>
@@ -256,12 +267,6 @@
 									</limits>
 								</rule>
 							</rules>
-							<!-- Excluir classes de configuração, DTOs, etc -->
-							<excludes>
-								<exclude>**/exception/**</exclude>
-								<exclude>**/response/**</exclude>
-<!--								<exclude>**/GerenciaEstoqueApplication.class</exclude>-->
-							</excludes>
 						</configuration>
 					</execution>
 
