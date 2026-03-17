@@ -2,8 +2,8 @@ spring:
   application:
     name: Gerencia de Estoque
 
-  profiles:
-    active: dev # Defino qual arquivo de application será utilizado
+#  profiles:
+#    active: dev # Defino qual arquivo de application será utilizado
 
 
   jpa:
