@@ -31,3 +31,43 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# ========== SEGURANÇA - Nunca commitar arquivos sensíveis ==========
+# Variáveis de ambiente
+.env
+.env.local
+.env.*.local
+*.properties.local
+
+# Arquivos de configuração sensíveis
+application-secret.yml
+application-secrets.properties
+application-local.yml
+
+# Credenciais AWS
+.aws/
+aws_credentials
+aws_secret
+
+# Chaves SSH e certificados
+*.pem
+*.key
+*.crt
+*.cer
+*.pfx
+
+# Arquivos de configuração do IDE com informações sensíveis
+*.launch
+
+# Logs que podem conter informações sensíveis
+*.log
+logs/
+
+# Backup de arquivos
+*.bak
+*.backup
+*~
+
+# macOS
+.DS_Store
+
