@@ -5,6 +5,10 @@ spring:
 #  profiles:
 #    active: dev # Defino qual arquivo de application será utilizado
 
+  servlet:
+    multipart:
+      max-file-size: 10MB # Tamanho máximo de arquivo individual
+      max-request-size: 10MB # Tamanho máximo de requisição total
 
   jpa:
     open-in-view: true # Habilita a visualização das queries no console
