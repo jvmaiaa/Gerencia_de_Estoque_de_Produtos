@@ -5,6 +5,18 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
-
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+
+  # Desabilita o Flyway no perfil de teste (H2 não precisa de migrações)
+  flyway:
+    enabled: false
+
+# Propriedades do AWS S3 com valores fictícios para o perfil de teste.
+# Necessário porque S3Properties exige que esses campos sejam não-nulos.
+aws:
+  s3:
+    bucket-name: test-bucket
+    access-key: test-access-key
+    secret-key: test-secret-key
+    region: us-east-1
