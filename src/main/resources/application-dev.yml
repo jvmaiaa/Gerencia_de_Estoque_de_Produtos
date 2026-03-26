@@ -11,3 +11,10 @@ spring:
   flyway:
     enabled: true # Habilita o Flyway na aplicação
     locations: classpath:db/migration # Caminho dos scripts de migração
+
+aws:
+  s3:
+    bucket-name: ${BUCKET_NAME:nome_padrao}
+    access-key: ${ACESS_KEY:acess_padrao}
+    secret-key: ${SECRET_KEY:secret_padrao}
+    region: us-east-1

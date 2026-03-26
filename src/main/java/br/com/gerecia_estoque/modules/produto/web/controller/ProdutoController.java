@@ -1,5 +1,6 @@
 package br.com.gerecia_estoque.modules.produto.web.controller;
 
+import br.com.gerecia_estoque.modules.produto.config.aws.S3Configuration;
 import br.com.gerecia_estoque.modules.produto.service.ProdutoService;
 import br.com.gerecia_estoque.modules.produto.web.dtos.ProdutoRequestDTO;
 import br.com.gerecia_estoque.modules.produto.web.dtos.ProdutoResponseDTO;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -27,6 +30,16 @@ import java.util.UUID;
 public class ProdutoController {
 
     private final ProdutoService produtoService;
+    private final S3Configuration s3Configuration;
+
+//    @Value("${aws.s3.bucket-name}")
+//    private String nomeBucket;
+//
+//    @Value("${aws.s3.access-key}")
+//    private String acess;
+//
+//    @Value("${aws.s3.secret-key}")
+//    private String secret;
 
     @PostMapping
     public ResponseEntity<ProdutoResponseDTO> create(@RequestBody @Valid ProdutoRequestDTO produto) {
@@ -35,8 +48,10 @@ public class ProdutoController {
                 .path("/{id}")
                 .buildAndExpand(produtoSalvo.getId())
                 .toUri();
-
-        return ResponseEntity.created(uri).body(produtoSalvo);
+        if (produtoSalvo.getId() != null) {
+            return ResponseEntity.created(uri).body(produtoSalvo);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping
@@ -66,6 +81,11 @@ public class ProdutoController {
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         produtoService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/cria-bucket")
+    public String criaBucket(@RequestParam("file") MultipartFile multipartFile) throws Exception {
+        return s3Configuration.uploadFile(multipartFile.getBytes(), multipartFile.getOriginalFilename(), multipartFile.getContentType());
     }
 
 }

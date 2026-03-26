@@ -34,6 +34,7 @@
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<lombok.version>1.18.36</lombok.version>
 		<instancio.version>5.4.0</instancio.version>
+		<aws.sdk.version>2.42.13</aws.sdk.version>
 	</properties>
 	<dependencies>
 
@@ -157,6 +158,16 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+		<!-- SDK da AWS para interação com o Amazon S3 -->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+			<version>${aws.sdk.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+
+
     </dependencies>
 
 	<build>
@@ -207,6 +218,7 @@
 						<exclude>**/enums/**</exclude>
 						<exclude>**/config/**</exclude>
 						<exclude>**/shared/**</exclude>
+						<exclude>**/mapper/**</exclude>
 						<exclude>**/GerenciaEstoqueApplication.class</exclude>
 					</excludes>
 				</configuration>
