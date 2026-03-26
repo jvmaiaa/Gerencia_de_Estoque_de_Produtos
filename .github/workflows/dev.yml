@@ -1,27 +1,159 @@
-name: CI/CD for Java Spring Project
+# =============================================================================
+# CI/CD Pipeline — Gerência de Estoque (Java 21 + Spring Boot)
+# =============================================================================
+# Este workflow executa todas as etapas essenciais de uma pipeline CI/CD
+# para uma aplicação Java + Spring moderna:
+#   1. Compilação do código-fonte
+#   2. Execução dos testes automatizados (unitários e de integração)
+#   3. Verificação de cobertura de testes (JaCoCo — mínimo 80%)
+#   4. Empacotamento do artefato final (.jar)
+#
+# Se qualquer etapa falhar, o Pull Request NÃO poderá ser mergeado.
+# =============================================================================
 
-# eventos que irão disparar os jobs
+name: CI/CD Pipeline
+
+# ---------------------------------------------------------------------------
+# GATILHOS (Triggers)
+# ---------------------------------------------------------------------------
+# - push: executa a pipeline quando há push na branch main ou em qualquer
+#   branch que siga o padrão feature/*
+# - pull_request: executa a pipeline quando um PR é aberto/atualizado
+#   contra a branch main, garantindo que código quebrado nunca seja mergeado
+# ---------------------------------------------------------------------------
 on:
   push:
-    branches: [main, feature/* ]
+    branches: [ main, feature/* ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
 
-  build: # nome interno do job
-    name: Build, Test and Package Spring Application # nome exibido na interface do Github Actions deste job
-    runs-on: ubuntu-latest # ambiente onde o job será executado
+  # ===========================================================================
+  # JOB: build
+  # ===========================================================================
+  # Responsável por compilar, testar e empacotar a aplicação.
+  # Roda em um runner Ubuntu com Java 21 (distribuição Temurin).
+  # ===========================================================================
+  build:
+    name: Build, Test & Package
+    runs-on: ubuntu-latest
 
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v5
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+      # -----------------------------------------------------------------------
+      # ETAPA 1 — Checkout do código
+      # -----------------------------------------------------------------------
+      # Clona o repositório no runner para que as próximas etapas tenham
+      # acesso ao código-fonte, pom.xml, scripts de migração, etc.
+      # -----------------------------------------------------------------------
+      - name: Checkout do código-fonte
+        uses: actions/checkout@v4
+
+      # -----------------------------------------------------------------------
+      # ETAPA 2 — Configurar o JDK 21
+      # -----------------------------------------------------------------------
+      # Instala e configura o Java Development Kit 21 (distribuição Temurin)
+      # no runner. A versão deve coincidir com <java.version> do pom.xml.
+      # -----------------------------------------------------------------------
+      - name: Configurar JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      # -----------------------------------------------------------------------
+      # ETAPA 3 — Cache das dependências do Maven
+      # -----------------------------------------------------------------------
+      # Armazena em cache o repositório local do Maven (~/.m2/repository).
+      # Isso evita baixar todas as dependências novamente em cada execução,
+      # acelerando significativamente a pipeline.
+      # A chave do cache é baseada no hash do pom.xml — se o pom.xml mudar,
+      # o cache é invalidado e as dependências são baixadas novamente.
+      # -----------------------------------------------------------------------
+      - name: Cache das dependências do Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # -----------------------------------------------------------------------
+      # ETAPA 4 — Dar permissão de execução ao Maven Wrapper
+      # -----------------------------------------------------------------------
+      # O arquivo mvnw precisa de permissão de execução no Linux.
+      # Sem isso, o runner não consegue executar o Maven Wrapper.
+      # -----------------------------------------------------------------------
+      - name: Dar permissão ao Maven Wrapper
+        run: chmod +x mvnw
+
+      # -----------------------------------------------------------------------
+      # ETAPA 5 — Compilar o projeto (sem rodar testes)
+      # -----------------------------------------------------------------------
+      # Compila todo o código-fonte e processa os annotation processors
+      # (Lombok e MapStruct). A flag -DskipTests pula a execução dos testes
+      # nesta etapa — eles serão executados separadamente na próxima etapa
+      # para melhor visibilidade e organização.
+      # -B ativa o modo batch (sem interatividade / sem logs de download).
+      # -----------------------------------------------------------------------
+      - name: Compilar o projeto
+        run: ./mvnw compile -B -DskipTests
+        env:
+          SPRING_PROFILES_ACTIVE: test
+
+      # -----------------------------------------------------------------------
+      # ETAPA 6 — Executar os testes automatizados
+      # -----------------------------------------------------------------------
+      # Roda todos os testes (unitários e de integração) usando o perfil
+      # "test", que configura o banco de dados H2 em memória.
+      # Isso garante que os testes não dependam de um banco externo (PostgreSQL).
+      #
+      # O JaCoCo (configurado no pom.xml) instrumenta o código durante os
+      # testes para coletar dados de cobertura.
+      # -----------------------------------------------------------------------
+      - name: Executar testes
+        run: ./mvnw test -B
+        env:
+          SPRING_PROFILES_ACTIVE: test
+
+      # -----------------------------------------------------------------------
+      # ETAPA 7 — Verificar cobertura de testes (JaCoCo)
+      # -----------------------------------------------------------------------
+      # Gera o relatório de cobertura e verifica se os limites mínimos
+      # definidos no pom.xml foram atingidos (80% de linhas e 80% de branches).
+      # Se a cobertura estiver abaixo do mínimo, a pipeline FALHA e o PR
+      # não poderá ser mergeado.
+      # -----------------------------------------------------------------------
+      - name: Verificar cobertura de testes (JaCoCo)
+        run: ./mvnw jacoco:report jacoco:check -B
+        env:
+          SPRING_PROFILES_ACTIVE: test
+
+      # -----------------------------------------------------------------------
+      # ETAPA 8 — Empacotar a aplicação (gerar o .jar)
+      # -----------------------------------------------------------------------
+      # Gera o artefato final (.jar) na pasta target/.
+      # A flag -DskipTests evita rodar os testes novamente (já rodaram acima).
+      # O .jar gerado é um "fat jar" do Spring Boot, contendo todas as
+      # dependências e pronto para ser executado com: java -jar app.jar
+      # -----------------------------------------------------------------------
+      - name: Empacotar a aplicação (.jar)
+        run: ./mvnw package -B -DskipTests
+        env:
+          SPRING_PROFILES_ACTIVE: test
+
+      # -----------------------------------------------------------------------
+      # ETAPA 9 — Upload do artefato gerado
+      # -----------------------------------------------------------------------
+      # Faz upload do .jar gerado como um "artifact" do GitHub Actions.
+      # Isso permite baixar o artefato diretamente pela interface do GitHub
+      # após a execução da pipeline, útil para deploys manuais ou auditorias.
+      # O artefato fica disponível por 7 dias.
+      # -----------------------------------------------------------------------
+      - name: Upload do artefato (.jar)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/*.jar
+          retention-days: 7
