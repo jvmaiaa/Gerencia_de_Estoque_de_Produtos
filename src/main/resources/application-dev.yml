@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/gerencia_estoque
-    username: postgres
-    password: root
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:root}
 
   jpa:
     hibernate:
