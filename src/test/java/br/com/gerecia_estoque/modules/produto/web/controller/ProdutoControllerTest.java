@@ -10,21 +10,29 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.instancio.Select.field;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 class ProdutoControllerTest {
@@ -43,6 +51,7 @@ class ProdutoControllerTest {
     void setup() {
         mockMvc = MockMvcBuilders
                 .standaloneSetup(produtoController)
+                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .build();
 
         objectMapper = new ObjectMapper();
@@ -50,7 +59,7 @@ class ProdutoControllerTest {
 
     @Test
     void deveCriarProdutoERetornar201ComLocation() throws Exception {
-        // Arrange 
+        // Arrange
         UUID id = UUID.randomUUID();
 
         ProdutoRequestDTO request = Instancio.of(ProdutoRequestDTO.class)
@@ -75,8 +84,7 @@ class ProdutoControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-//                .andExpect(header().string("Location",
-//                        "http://localhost/api/v1/produtos/" + id))
+                .andExpect(header().string("Location", containsString("/produtos/" + id)))
                 .andExpect(jsonPath("$.id").value(id.toString()))
                 .andExpect(jsonPath("$.nome").value(request.getNome()))
                 .andExpect(jsonPath("$.descricao").value(request.getDescricao()))
@@ -85,25 +93,85 @@ class ProdutoControllerTest {
                 .andExpect(jsonPath("$.quantidadeEstoque").value(request.getQuantidadeEstoque()));
     }
 
+
     @Test
-    void deveRetornar400QuandoIdForNull() throws Exception {
+    void deveRetornarPaginaDeProdutosERetornar200QuandoExistiremProdutos() throws Exception {
+        // Arrange
+        List<ProdutoResponseDTO> produtos = Instancio.ofList(ProdutoResponseDTO.class)
+                .size(3)
+                .create();
+        Page<ProdutoResponseDTO> page = new PageImpl<>(produtos, PageRequest.of(0, 10), produtos.size());
 
+        when(produtoService.findAllPaginated(any(Pageable.class))).thenReturn(page);
+
+        // Act & Assert
+        mockMvc.perform(get("/produtos")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content.length()").value(3));
+    }
+
+    @Test
+    void deveRetornar204QuandoNaoExistiremProdutos() throws Exception {
+        // Arrange
+        Page<ProdutoResponseDTO> pageVazia = Page.empty();
+        when(produtoService.findAllPaginated(any(Pageable.class))).thenReturn(pageVazia);
+
+        // Act & Assert
+        mockMvc.perform(get("/produtos")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deveRetornarProdutoERetornar200QuandoIdExistir() throws Exception {
+        // Arrange
+        UUID id = UUID.randomUUID();
+        ProdutoResponseDTO response = Instancio.of(ProdutoResponseDTO.class)
+                .set(field(ProdutoResponseDTO::getId), id)
+                .create();
+        when(produtoService.findById(id)).thenReturn(response);
+
+        // Act & Assert
+        mockMvc.perform(get("/produtos/{id}", id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id.toString()));
+    }
+
+    @Test
+    void deveAtualizarProdutoERetornar200QuandoIdExistir() throws Exception {
+        // Arrange
+        UUID id = UUID.randomUUID();
         ProdutoRequestDTO request = Instancio.of(ProdutoRequestDTO.class)
-                .set(field(ProdutoRequestDTO::getQuantidadeEstoque), 10)
+                .set(field(ProdutoRequestDTO::getQuantidadeEstoque), 5)
                 .create();
-
-        ProdutoResponseDTO responseComIdNull = Instancio.of(ProdutoResponseDTO.class)
-                .set(field(ProdutoResponseDTO::getId), null)
+        ProdutoResponseDTO response = Instancio.of(ProdutoResponseDTO.class)
+                .set(field(ProdutoResponseDTO::getId), id)
                 .create();
+        when(produtoService.update(eq(id), any(ProdutoRequestDTO.class))).thenReturn(response);
 
-        given(produtoService.save(any(ProdutoRequestDTO.class)))
-                .willReturn(responseComIdNull);
-
-        mockMvc.perform(post("/produtos")
+        // Act & Assert
+        mockMvc.perform(put("/produtos/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(""));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id.toString()));
+    }
+
+    @Test
+    void deveDeletarProdutoERetornar204QuandoIdExistir() throws Exception {
+        // Arrange
+        UUID id = UUID.randomUUID();
+        doNothing().when(produtoService).delete(id);
+
+        // Act & Assert
+        mockMvc.perform(delete("/produtos/{id}", id))
+                .andExpect(status().isNoContent());
+
+        verify(produtoService, times(1)).delete(id);
     }
 
 }
