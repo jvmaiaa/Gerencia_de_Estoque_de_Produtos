@@ -1,18 +1,5 @@
 package br.com.gerecia_estoque.modules.produto.service.impl;
 
-import static br.com.gerecia_estoque.shared.exceptions.ExceptionMessages.CODIGO_BARRAS_NAO_PODE_SER_ALTERADO;
-import static br.com.gerecia_estoque.shared.exceptions.ExceptionMessages.PRODUTO_JA_EXISTE;
-import static br.com.gerecia_estoque.shared.exceptions.ExceptionMessages.PRODUTO_NAO_ENCONTRADO;
-import static java.util.Objects.nonNull;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import br.com.gerecia_estoque.modules.produto.domain.entity.ProdutoEntity;
 import br.com.gerecia_estoque.modules.produto.domain.exception.ProdutoExistsException;
 import br.com.gerecia_estoque.modules.produto.domain.repository.ProdutoRepository;
@@ -22,14 +9,30 @@ import br.com.gerecia_estoque.modules.produto.web.dtos.ProdutoResponseDTO;
 import br.com.gerecia_estoque.modules.produto.web.mapper.ProdutoMapper;
 import br.com.gerecia_estoque.shared.exceptions.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+import static br.com.gerecia_estoque.shared.exceptions.ExceptionMessages.*;
+import static java.util.Objects.nonNull;
 
 @RequiredArgsConstructor
 @Service
 public class ProdutoServiceImpl implements ProdutoService {
 
+    private static final String PRODUTOS_CACHE = "produtosCache";
+
     private final ProdutoRepository produtoRepository;
     private final ProdutoMapper produtoMapper;
 
+    @CacheEvict(cacheNames = PRODUTOS_CACHE, allEntries = true)
     public ProdutoResponseDTO save(ProdutoRequestDTO produtoRequestDTO) {
         ProdutoEntity produtoSaved = produtoMapper.requestToEntity(produtoRequestDTO);
         produtoSaved.setDataCadastro(LocalDateTime.now());
@@ -40,11 +43,21 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
+    @Cacheable(cacheNames = PRODUTOS_CACHE, cacheManager = "redisCacheManager")
+    public List<ProdutoResponseDTO> findAll() {
+        return produtoRepository.findAll()
+                .stream()
+                .map(produtoMapper::entityToResponse)
+                .toList();
+    }
+
+    @Override
     public Page<ProdutoResponseDTO> findAllPaginated(Pageable pageable) {
         return produtoRepository.findAll(pageable).map(produtoMapper::entityToResponse);
     }
 
     @Override
+    @Cacheable(cacheNames = PRODUTOS_CACHE, key = "#uuid")
     public ProdutoResponseDTO findById(UUID uuid) {
         ProdutoEntity produtoEntity = produtoRepository.findById(uuid)
                 .orElseThrow(() -> new EntityNotFoundException(PRODUTO_NAO_ENCONTRADO));
@@ -53,6 +66,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = PRODUTOS_CACHE, key = "#uuid")
     public ProdutoResponseDTO update(UUID uuid, ProdutoRequestDTO produtoRequestDTO) {
         validaNomeECodigoDeBarras(produtoRequestDTO);
 
@@ -67,6 +81,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
+    @CacheEvict(cacheNames = PRODUTOS_CACHE, key = "#uuid")
     public void delete(UUID uuid) {
         ProdutoEntity produtoEntity = produtoRepository.findById(uuid)
                 .orElseThrow(() -> new EntityNotFoundException(PRODUTO_NAO_ENCONTRADO));
