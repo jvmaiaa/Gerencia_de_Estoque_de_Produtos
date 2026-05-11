@@ -5,19 +5,40 @@ spring:
 #  profiles:
 #    active: dev # Defino qual arquivo de application será utilizado
 
+# Configurações de upload de arquivos para o S3
   servlet:
     multipart:
       max-file-size: 10MB # Tamanho máximo de arquivo individual
       max-request-size: 10MB # Tamanho máximo de requisição total
 
+# Configurações de JPA
   jpa:
     open-in-view: true # Habilita a visualização das queries no console
     properties:
       hibernate:
         format_sql: true # Formata as queries no console
 
+# Configurações de cache usando Redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
+# Configurações de cache usando Caffeine
+app:
+  cache:
+    caffeine:
+      maximum-size: 1000 # Quantidade máxima de entradas no cache
+      expire-after-minutes: 1 # Tempo de expiração do cache em minutos
 
+# Configurações de monitoramento usando Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [info, caches, metrics] # Expondo os endpoints de cache e métricas para monitoramento
+
+# Configuração do servidor para definir o contexto da API
 server:
   servlet:
     context-path: /api/v1 # Define o prefixo de todas URLs da api

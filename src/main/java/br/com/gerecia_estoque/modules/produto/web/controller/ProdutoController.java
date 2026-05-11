@@ -6,6 +6,7 @@ import br.com.gerecia_estoque.modules.produto.web.dtos.ProdutoRequestDTO;
 import br.com.gerecia_estoque.modules.produto.web.dtos.ProdutoResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -22,24 +23,17 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
-@RequiredArgsConstructor
+@Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/produtos")
 public class ProdutoController {
 
     private final ProdutoService produtoService;
     private final S3Configuration s3Configuration;
-
-//    @Value("${aws.s3.bucket-name}")
-//    private String nomeBucket;
-//
-//    @Value("${aws.s3.access-key}")
-//    private String acess;
-//
-//    @Value("${aws.s3.secret-key}")
-//    private String secret;
 
     @PostMapping
     public ResponseEntity<ProdutoResponseDTO> create(@RequestBody @Valid ProdutoRequestDTO produto) {
@@ -48,21 +42,25 @@ public class ProdutoController {
                 .path("/{id}")
                 .buildAndExpand(produtoSalvo.getId())
                 .toUri();
-        if (produtoSalvo.getId() != null) {
-            return ResponseEntity.created(uri).body(produtoSalvo);
-        }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.created(uri).body(produtoSalvo);
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProdutoResponseDTO>> getAll(Pageable pageable) {
+    public ResponseEntity<Page<ProdutoResponseDTO>> getAllPaginated(Pageable pageable) {
         Page<ProdutoResponseDTO> produtosResponse = produtoService.findAllPaginated(pageable);
-
         if (produtosResponse.isEmpty()) {
             return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.ok(produtosResponse);
         }
+        return ResponseEntity.ok(produtosResponse);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ProdutoResponseDTO>> getAll() {
+        List<ProdutoResponseDTO> produtosResponse = produtoService.findAll();
+        if (produtosResponse.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(produtosResponse);
     }
 
     @GetMapping("/{id}")

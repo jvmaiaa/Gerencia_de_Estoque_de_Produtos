@@ -1,5 +1,6 @@
 package br.com.gerecia_estoque.modules.produto.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -11,6 +12,8 @@ import br.com.gerecia_estoque.modules.produto.web.dtos.ProdutoResponseDTO;
 public interface ProdutoService {
 
     ProdutoResponseDTO save(ProdutoRequestDTO produtoRequestDTO);
+
+    List<ProdutoResponseDTO> findAll();
 
     Page<ProdutoResponseDTO> findAllPaginated(Pageable pageable);
 
