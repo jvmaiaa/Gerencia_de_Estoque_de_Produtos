@@ -4,6 +4,7 @@ import br.com.gerecia_estoque.modules.produto.config.aws.S3Configuration;
 import br.com.gerecia_estoque.modules.produto.service.ProdutoService;
 import br.com.gerecia_estoque.modules.produto.web.dtos.ProdutoRequestDTO;
 import br.com.gerecia_estoque.modules.produto.web.dtos.ProdutoResponseDTO;
+import br.com.gerecia_estoque.shared.config.swagger.Interface.ProdutoControllerOpenApi;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/produtos")
-public class ProdutoController {
+public class ProdutoController implements ProdutoControllerOpenApi {
 
     private final ProdutoService produtoService;
     private final S3Configuration s3Configuration;
