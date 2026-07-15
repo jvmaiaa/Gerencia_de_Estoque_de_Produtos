@@ -42,3 +42,12 @@ management:
 server:
   servlet:
     context-path: /api/v1 # Define o prefixo de todas URLs da api
+
+# Configuração do SpringDoc / Swagger UI
+springdoc:
+  api-docs:
+    path: /v3/api-docs # Endpoint da documentação OpenAPI em formato JSON
+  swagger-ui:
+    path: /swagger-ui.html # Endpoint da interface Swagger UI
+    operations-sorter: method # Ordena as operações por método HTTP
+    tags-sorter: alpha # Ordena as tags em ordem alfabética
